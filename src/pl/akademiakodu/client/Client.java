@@ -3,8 +3,11 @@ package pl.akademiakodu.client;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -43,15 +46,18 @@ public class Client {
 			public void run() {
 				try {
 					BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
+                    Scanner scan = new Scanner(System.in);
 					while (true) {
 
 						String message = in.readLine();
 						if (message != null) {
                              System.out.println("Wiadomoœæ od servera: " + message);
-                         	in.close();
-    						socket.close();
-    						break;
+                             System.out.print("Wpisz wiadomoœæ wysy³an¹ do serwera: ");
+                             String messageFromClient = scan.nextLine();
+                             
+                     		PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
+                     		writer.println(messageFromClient);
+                              
 
 						}
 						

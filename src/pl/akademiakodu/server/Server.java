@@ -1,6 +1,8 @@
 package pl.akademiakodu.server;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
@@ -52,6 +54,7 @@ public class Server {
 						System.out.println("Nowe po³¹cznie : " + socket);
 						PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
 						writer.println("Witaj przyjacielu!");
+						readMessages();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -68,11 +71,28 @@ public class Server {
 			@Override
 			public void run() {
 			
-				 
-				 
+				try {
+					
+					BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				
+				 while(true) { 
+					 
+					  String line = in.readLine();
+					   if(line != null) { 
+						   System.out.println("Wiadomoœæ od clienta: " + line);
+					   }
+				  
+				  }
+				 
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
+				
+			
 		};
+		threadService.execute(run);
 	}
 
 }
