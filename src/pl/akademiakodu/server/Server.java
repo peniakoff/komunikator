@@ -18,7 +18,7 @@ public class Server {
 	private ServerSocket server;
 
 	private ExecutorService threadService;
-    private Socket socket;
+
     
 	public static void main(String[] args) {
 
@@ -50,11 +50,10 @@ public class Server {
 
 				while (true) {
 					try {
-						socket = server.accept();
+						Socket socket = server.accept();
 						System.out.println("Nowe po³¹cznie : " + socket);
-						PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
-						writer.println("Witaj przyjacielu!");
-						readMessages();
+						
+						
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -66,33 +65,6 @@ public class Server {
 		threadService.execute(runnable);
 	}
 	
-	private void readMessages(){
-		Runnable run = new Runnable() { 
-			@Override
-			public void run() {
-			
-				try {
-					
-					BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				
-				 while(true) { 
-					 
-					  String line = in.readLine();
-					   if(line != null) { 
-						   System.out.println("Wiadomoœæ od clienta: " + line);
-					   }
-				  
-				  }
-				 
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-				
-			
-		};
-		threadService.execute(run);
-	}
+
 
 }

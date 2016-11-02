@@ -27,6 +27,10 @@ public class Client {
 
 		try {
 			socket = new Socket(HOST, PORT);
+			socket.setSoTimeout(500);
+			//socket.setKeepAlive(true);
+			//socket.setSoLinger(true, 5000);
+			socket.setTcpNoDelay(true);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -46,18 +50,12 @@ public class Client {
 			public void run() {
 				try {
 					BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    Scanner scan = new Scanner(System.in);
+                  
 					while (true) {
 
 						String message = in.readLine();
 						if (message != null) {
                              System.out.println("Wiadomoœæ od servera: " + message);
-                             System.out.print("Wpisz wiadomoœæ wysy³an¹ do serwera: ");
-                             String messageFromClient = scan.nextLine();
-                             
-                     		PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
-                     		writer.println(messageFromClient);
-                              
 
 						}
 						
