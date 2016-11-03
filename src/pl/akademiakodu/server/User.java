@@ -1,5 +1,9 @@
 package pl.akademiakodu.server;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 public class User implements Runnable {
@@ -13,12 +17,33 @@ public class User implements Runnable {
 	private String postfix;
 	private int warnings; 
 	private boolean isMuted; 
+	private PrintWriter printWriter; 
+	private BufferedReader buffReader; 
+	
 	
 	public User(Socket localSocket) { 
 		userSocket = localSocket;
 		accountType = AccountType.USER;
+		
+		init();
 	}
 	
+	private void init(){ 
+		try {
+			printWriter = new PrintWriter(getSocket().getOutputStream(), true);
+			buffReader = new BufferedReader(
+					new InputStreamReader(getSocket().getInputStream()));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+	}
+	
+	public void sendMessage(String msg) {
+		if(msg == null) throw new NullPointerException();
+		printWriter.println(msg);
+	}
 	
 	public boolean canWrite() { 
 		return !isMuted() && getWarningsCount() < maxWarnings; 
