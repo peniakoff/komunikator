@@ -1,5 +1,7 @@
 package pl.akademiakodu.client;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,7 +13,14 @@ import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Client {
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+
+public class Client extends JFrame{
 
 	public static final String HOST = "localhost";
 	public static final int PORT = 4122;
@@ -19,11 +28,41 @@ public class Client {
 	private Socket socket;
 	private ExecutorService threadService;
 
+	private JTextPane textArea; 
+	
 	public static void main(String[] args) {
          new Client();
 	}
 
 	public Client() {
+  
+		// przypisanie elementów
+		textArea = new JTextPane(); 
+		textArea.setEditable(false);
+		textArea.setContentType("text/html");
+		textArea.setPreferredSize(new Dimension(500,200));
+ 
+		JScrollPane scrollPane = new JScrollPane(textArea);
+		add(scrollPane, BorderLayout.CENTER);
+		
+		Box box = Box.createHorizontalBox();
+		add(box, BorderLayout.SOUTH);
+		
+		JTextField inputText = new JTextField();
+		JButton buttonSend = new JButton("Wyœlij");
+		
+		box.add(inputText);
+		box.add(buttonSend);
+		
+		setTitle("AkademiaKodu Komunikator");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		pack();
+		setResizable(false);
+		setVisible(true);
+		
+	}
+	
+	private void connectToServer(){ 
 
 		try {
 			socket = new Socket(HOST, PORT);
@@ -74,6 +113,10 @@ public class Client {
 		
 		threadService.execute(runnable);
 
+	}
+	
+	private void createGUI() { 
+		 
 	}
 
 }

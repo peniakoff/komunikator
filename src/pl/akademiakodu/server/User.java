@@ -124,9 +124,14 @@ public class User implements Runnable {
 	
 	@Override
 	public void run() {
-		 
 	     while(true) { 
-	    	  String input = 
+	    	  String input = getMessage();
+	    	  // Pos³anie wiadomoœci do wszystkich aktualnie online.
+	    	    if(input != null) { 
+	    	    	for(User user : Server.getUserList()){ 
+	    	    		user.sendMessage(input);
+	    	    	}
+	    	    }
 	     }
 		
 	}
