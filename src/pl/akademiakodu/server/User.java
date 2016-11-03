@@ -129,7 +129,7 @@ public class User implements Runnable {
 	    	  // Pos³anie wiadomoœci do wszystkich aktualnie online.
 	    	    if(input != null) { 
 	    	    	for(User user : Server.getUserList()){ 
-	    	    		user.sendMessage(input);
+	    	    		user.sendMessage("<br>"+input+"</br>");
 	    	    	}
 	    	    }
 	     }
