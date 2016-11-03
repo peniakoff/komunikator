@@ -34,7 +34,7 @@ public class User implements Runnable {
 			buffReader = new BufferedReader(
 					new InputStreamReader(getSocket().getInputStream()));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			System.out.println("B³¹d inicjalizacji streamu");
 			e.printStackTrace();
 		}
 	
