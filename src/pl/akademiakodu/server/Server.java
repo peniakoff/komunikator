@@ -53,8 +53,13 @@ public class Server {
 
 		while (true) {
 			try {
-				
-				User user = new User(server.accept());
+			
+			 User user = new User(server.accept());
+			 if(getUserList().size() > maxUser){
+				user.sendMessage("Przykro mi, ale ju¿ brak miejsc.");
+				user.disconnect();
+				continue; 
+			 }
 				getUserList().add(user);
 				threadService.execute(user);
 				System.out.println("Nowe po³¹cznie : " + user.getSocket());

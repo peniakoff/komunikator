@@ -45,6 +45,15 @@ public class User implements Runnable {
 		printWriter.println(msg);
 	}
 	
+	private String getMessage() { 
+		 try {
+			return buffReader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public boolean canWrite() { 
 		return !isMuted() && getWarningsCount() < maxWarnings; 
 	}
@@ -98,6 +107,10 @@ public class User implements Runnable {
 		return userSocket;
 	}
 	
+	public boolean isConnected() { 
+		return !getSocket().isClosed() && getSocket().isConnected();
+	}
+	
 	public void disconnect() { 
 		if(Server.getUserList().contains(this)) {
 			Server.getUserList().remove(this);
@@ -111,7 +124,11 @@ public class User implements Runnable {
 	
 	@Override
 	public void run() {
-		 // Na razie nic
+		 
+	     while(true) { 
+	    	  String input = 
+	     }
+		
 	}
 	
 	public enum AccountType { 
