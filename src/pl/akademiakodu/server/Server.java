@@ -42,7 +42,7 @@ public class Server {
 			e.printStackTrace();
 		}
 
-		userList = new ArrayList<User>(maxUser); 
+		userList = new ArrayList<User>(maxUser+1); 
 		threadService = Executors.newFixedThreadPool(maxUser);
 		listenToSockets();
 	}
@@ -53,8 +53,10 @@ public class Server {
 
 		while (true) {
 			try {
+				
 				User user = new User(server.accept());
 				getUserList().add(user);
+				threadService.execute(user);
 				System.out.println("Nowe po³¹cznie : " + user.getSocket());
 
 			} catch (IOException e) {

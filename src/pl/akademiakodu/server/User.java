@@ -98,6 +98,17 @@ public class User implements Runnable {
 		return userSocket;
 	}
 	
+	public void disconnect() { 
+		if(Server.getUserList().contains(this)) {
+			Server.getUserList().remove(this);
+		}
+		try {
+			getSocket().close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public void run() {
 		 // Na razie nic
