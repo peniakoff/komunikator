@@ -19,6 +19,7 @@ public class User implements Runnable {
 	private boolean isMuted; 
 	private PrintWriter printWriter; 
 	private BufferedReader buffReader; 
+	private CommandController commandController; 
 	
 	
 	public User(Socket localSocket) { 
@@ -37,7 +38,7 @@ public class User implements Runnable {
 			System.out.println("B³¹d inicjalizacji streamu");
 			e.printStackTrace();
 		}
-	
+		commandController  = new CommandController(this);
 	}
 	
 	public void sendMessage(String msg) {
@@ -49,7 +50,7 @@ public class User implements Runnable {
 		 try {
 			return buffReader.readLine();
 		} catch (IOException e) {
-			e.printStackTrace();
+			disconnect();
 			return null;
 		}
 	}
@@ -108,32 +109,57 @@ public class User implements Runnable {
 	}
 	
 	public boolean isConnected() { 
-		return !getSocket().isClosed() && getSocket().isConnected();
+		return  !getSocket().isClosed();
 	}
 	
 	public void disconnect() { 
 		if(Server.getUserList().contains(this)) {
 			Server.getUserList().remove(this);
 		}
+		
+		sendMessageToAll("<b>U¿ytownik " + getFullName() + " opuœci³ czat.</b>");
+		
+	
+		
 		try {
 			getSocket().close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.out.println("Socket by³ ju¿ wczeœniej zamkniêty!");
 		}
 	}
 	
+	
+	
 	@Override
 	public void run() {
+		
+		if(getNickname() == null) { 
+    		 sendMessage("Pierwsza Twoja wiadomoœæ, zostanie ustawiona jako nick.");
+    		 setNickname(getMessage());
+    		 sendMessage("Twój nick od teraz to: " + getNickname());
+    	}
+    	
+		
 	     while(true) { 
+	    	  if(!isConnected()) {  break; }
+	    	  
+	    	
+	    	  
 	    	  String input = getMessage();
-	    	  // Pos³anie wiadomoœci do wszystkich aktualnie online.
 	    	    if(input != null) { 
-	    	    	for(User user : Server.getUserList()){ 
-	    	    		user.sendMessage("<br>"+input+"</br>");
-	    	    	}
+	    	    	if(commandController.searchCommand(input)) continue; 
+	    	    	
+	    	    	sendMessageToAll(getFullName() + ": " + input);
 	    	    }
 	     }
 		
+	}
+	
+	private void sendMessageToAll(String msg) {
+		for(User user : Server.getUserList()){ 
+    		user.sendMessage(msg);
+    	}
 	}
 	
 	public enum AccountType { 

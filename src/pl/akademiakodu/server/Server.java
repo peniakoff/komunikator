@@ -42,7 +42,7 @@ public class Server {
 			e.printStackTrace();
 		}
 
-		userList = new ArrayList<User>(maxUser+1); 
+		userList = new ArrayList<User>(maxUser); 
 		threadService = Executors.newFixedThreadPool(maxUser);
 		listenToSockets();
 	}
@@ -74,5 +74,15 @@ public class Server {
 	public static List<User> getUserList() {
 		return userList;
 	}
+	
+	public static User getUserByName(String name){ 
+	    for(User u : userList) { 
+	    	if(u.getNickname().equals(name)){ 
+	    		return u;
+	    	}
+	    }
+	    return null;
+	}
+	
 
 }
