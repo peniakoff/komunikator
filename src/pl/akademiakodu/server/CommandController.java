@@ -30,19 +30,21 @@ public class CommandController {
 			return false;
 
 		for (Command cmd : commands) {
-            
-			if (msg.contains(cmd.getName())) {
+                      // /komenda <arg1> <arg2>                    /komenda
+			if (msg.matches("/" + cmd.getName() + " " + ".*") || msg.matches("/" + cmd.getName())) {
 				// TODO obs³uga bez argumentów
 				// /setadmin
 				if (msg.length() == cmd.getName().length() + 1) {
-					ourUser.sendMessage(cmd.getInfo());
+					cmd.performAction(ourUser, new String[] {});
+					return true;
+				} else {
+					// /komenda <arg1> <arg2> <arg3> ... <argN> /setadmin Oskar
+					String[] args = msg.substring(cmd.getName().length() + 2, msg.length()).split(" ");
+					cmd.performAction(ourUser, args);
+
 					return true;
 				}
-				// /komenda <arg1> <arg2> <arg3> ... <argN> /setadmin Oskar
-				String[] args = msg.substring(cmd.getName().length() + 2, msg.length()).split(" ");
-				cmd.performAction(ourUser, args);
-				
-				return true;
+
 			}
 		}
 		return false;

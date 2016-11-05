@@ -13,12 +13,14 @@ public class CommandMute implements Command {
 
 	@Override
 	public void performAction(User executer, String... args) {
-
-		// if (args.length > 0) {
-		// executer.sendMessage(getInfo());
-		// return;
-		// }
-
+		
+		
+		
+		
+		if (args.length != 1) {
+			executer.sendMessage(getInfo());
+			return;
+		}
 		if (requireAdmin()) {
 			if (executer.getAccountType() != AccountType.ADMIN) {
 				executer.sendMessage("Musisz byæ administratorem, aby wywo³aæ t¹ funckjê");
@@ -26,28 +28,17 @@ public class CommandMute implements Command {
 			}
 		}
 
-		for (String user : args) {
-			User otherUser = Server.getUserByName(user);
+		User otherUser = Server.getUserByName(args[0]);
+		
 
-			if (otherUser == null) {
-				executer.sendMessage("Taki u¿ytkownik nie istnieje!");
-				continue;
-			}
-
-			if (executer.getNickname().equals(otherUser.getNickname())) {
-				executer.sendMessage("Nie mo¿esz wykonaæ tej komendy na samym sobie!");
-				continue;
-			}
-
-			if (otherUser.isMuted()) {
-				executer.sendMessage("Ten u¿ytkownik ma ju¿ mute!");
-				continue;
-			}
-			otherUser.setMute(true);
-			otherUser.sendMessage("<b>Zosta³eœ zmutowany!</b>");
-			executer.sendMessage("<b> Zmutowa³eœ " + otherUser.getFullName() + ".</b>");
-
+		if (otherUser == null) {
+			executer.sendMessage("Taki u¿ytkownik nie istnieje!");
+			return;
 		}
+		
+		otherUser.setMute(true);
+		otherUser.sendMessage("<b>Zosta³eœ zmutowany!</b>");
+		executer.sendMessage("<b> Zmutowa³eœ " + otherUser.getFullName() + ".</b>");
 	}
 
 	@Override
@@ -57,7 +48,7 @@ public class CommandMute implements Command {
 
 	@Override
 	public String getInfo() {
-		return "Wpisz /mute nick nick nick nick ... - aby kogos zmutowac";
+		return "Wpisz /mute nick - aby kogos zmutowac";
 	}
 
 }
