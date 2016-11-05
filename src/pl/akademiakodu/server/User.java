@@ -26,6 +26,7 @@ public class User implements Runnable {
 	public User(Socket localSocket) {
 		userSocket = localSocket;
 		accountType = AccountType.ADMIN;
+		nickname = "";
 
 		init();
 	}
@@ -114,6 +115,15 @@ public class User implements Runnable {
 		return !getSocket().isClosed();
 	}
 
+	public void kick(String msg) {
+		sendMessage(msg);
+		try {
+			getSocket().close();
+		} catch (IOException e) {
+			System.out.println("B³¹d przy kicku u¿ytkownika");
+		}
+	}
+
 	public void disconnect() {
 		if (Server.getUserList().contains(this)) {
 			Server.getUserList().remove(this);
@@ -135,13 +145,29 @@ public class User implements Runnable {
 
 	@Override
 	public void run() {
+		sendMessage("Pierwsza Twoja wiadomoœæ, zostanie ustawiona jako nick.");
+		
+		while (true) {
+			 String nick = getMessage();
+		     boolean localNickIsCorrect = true;
+			 for(User u : Server.getUserList()) { 
+				 if(u.getNickname().equals(nick)){
+					 localNickIsCorrect = false;
+					 break;
+				 }
+			 }
+			 
+			 if(!localNickIsCorrect) { 
+				 sendMessage("Ten nick jest zajêty, wpisz inny");
+			 }else{
+				 setNickname(nick);
+				 break;
+			 }
 
-		if (getNickname() == null) {
-			sendMessage("Pierwsza Twoja wiadomoœæ, zostanie ustawiona jako nick.");
-			setNickname(getMessage());
-			sendMessage("Twój nick od teraz to: " + getNickname());
 		}
 
+		sendMessage("Ustawiliœmy Twój nick na " + getNickname());
+		
 		while (true) {
 			if (!isConnected()) {
 				break;
@@ -151,7 +177,7 @@ public class User implements Runnable {
 			if (input != null) {
 				if (commandController.searchCommand(input))
 					continue;
-				if(isMuted()) { 
+				if (isMuted()) {
 					sendMessage("Nie mo¿esz pisaæ, masz mute!");
 					continue;
 				}
