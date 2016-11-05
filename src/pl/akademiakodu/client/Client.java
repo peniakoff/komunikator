@@ -127,7 +127,7 @@ public class Client extends JFrame {
 		readMessages();
 	}
 
-	private void addTextLine(String text) {
+	private void addTextLine(final String text) {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
