@@ -14,7 +14,8 @@ public class CommandSetAdmin implements Command {
 	@Override
 	public void performAction(User executer, String... args) {
 
-
+        // Powiedzieæ o klasach abstrakcyjnych w przypadku sprawdzania "isAdmin"/
+		
 		if (args.length != 1) {
 			executer.sendMessage(getInfo());
 			return;
@@ -44,7 +45,7 @@ public class CommandSetAdmin implements Command {
 
 	@Override
 	public String getInfo() {
-		return "Aby komenda zadzia³a³a u¿yj : /setadmin <nick>";
+		return "Aby komenda zadzia³a³a u¿yj : /setadmin nick";
 	}
 
 }

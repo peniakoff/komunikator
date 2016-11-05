@@ -24,7 +24,7 @@ public class User implements Runnable {
 	
 	public User(Socket localSocket) { 
 		userSocket = localSocket;
-		accountType = AccountType.USER;
+		accountType = AccountType.ADMIN;
 		
 		init();
 	}
